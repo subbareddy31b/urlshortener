@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: transparent;
+            transition: border-color 0.3s ease;
+            z-index: 1;
+        }
+        input[type="text"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        input[type="text"]:focus + label,
+        input[type="text"]:not(:placeholder-shown) + label {
+            transform: translateY(-35px);
+            font-size: 1rem;
+            color: #050505;
+        }
+        label {
+            position: absolute;
+            left: 10px;
+            top: 12px;
+            font-size: 1rem;
+            color: #aaa;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 0;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f1f1;
+            border-radius: 5px;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Shortener</h1>
+        <form method="POST" action="/sub">
+            <div class="input-group">
+                <input type="text" id="inputText" name="inputText" placeholder=" " required>
+                <label for="inputText">Shorten a long URL</label>
+            </div>
+            <button type="submit">Shorten URL</button>
+        </form>
+
+        {% if method == "POST" and output %}
+            <div class="output">
+                <h2>Shortened URL:</h2>
+                <p id="shortened-url">{{ output }}</p>
+                <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+            </div>
+        {% elif method == "GET" %}
+            <div class="output">
+                <h2>Welcome!</h2>
+                <p>Please submit the form to shorten a URL.</p>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        function copyToClipboard() {
+            const urlText = document.getElementById("shortened-url").innerText;
+            navigator.clipboard.writeText(urlText).then(() => {
+            }).catch(err => {
+                alert("Failed to copy URL: " + err);
+            });
+        }
+    </script>
+</body>
+</html>
